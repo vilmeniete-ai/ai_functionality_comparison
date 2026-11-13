@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Platform Functionality Comparison 2026</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial;background:#F3F1EF;margin:0;padding:40px}
+.hero{background:linear-gradient(135deg,#0f172a,#4F6988);color:#fff;border-radius:20px;padding:40px 32px;box-shadow:0 20px 50px rgba(15,23,42,.18);margin-bottom:28px}
+.hero h1{font-size:26px;font-weight:bold;margin-bottom:8px}
+.hero p{font-size:15px;opacity:.85}
+.tabs{display:flex;gap:4px;margin-bottom:1.5rem;border-bottom:2px solid #d9cfc4;padding-bottom:0}
+.tab-btn{padding:12px 28px;border:none;border-radius:20px 20px 0 0;cursor:pointer;background:#e8ddd2;color:#4b3b33;font-size:14px;font-family:Arial;font-weight:bold;margin-bottom:-2px;border-bottom:2px solid #d9cfc4}
+.tab-btn.active{background:#4F6988;color:#fff;border-bottom:2px solid #4F6988}
+.tab-btn:hover:not(.active){background:#d9cfc4}
+.panel{display:none}
+.panel.active{display:block}
+
+/* COMPARE TAB */
+.legend-row{display:flex;gap:20px;flex-wrap:wrap;margin-bottom:1.2rem;font-size:13px;color:#4b3b33;align-items:center}
+.leg{display:flex;align-items:center;gap:6px}
+.filters-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.2rem}
+.pill{padding:7px 14px;border:none;border-radius:20px;cursor:pointer;background:#e8ddd2;color:#4b3b33;font-size:12px;font-family:Arial}
+.pill.active{background:#4F6988;color:#fff}
+.pill:hover:not(.active){background:#d9cfc4}
+.tbl-wrap{overflow-x:auto;border:1px solid #d9cfc4;border-radius:16px;background:#fff;margin-bottom:1.5rem}
+table.compare{width:100%;border-collapse:collapse;font-size:12px;min-width:820px}
+table.compare th.feat-col{width:200px;min-width:160px}
+table.compare th.plat-col{width:100px;text-align:center}
+table.compare thead tr:first-child th{background:linear-gradient(135deg,#0f172a,#4F6988);color:#fff;padding:12px 10px;font-size:12px;font-weight:bold;letter-spacing:.03em}
+table.compare thead tr:first-child th:first-child{border-radius:16px 0 0 0;text-align:left;padding-left:14px}
+table.compare thead tr:first-child th:last-child{border-radius:0 16px 0 0}
+table.compare thead tr.sub-head th{background:#f7f5f2;color:#4F6988;font-size:11px;padding:6px 10px;text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid #e8ddd2;text-align:center}
+table.compare thead tr.sub-head th:first-child{text-align:left;padding-left:14px}
+table.compare tr.category-row td{background:#f7f5f2;color:#7A4531;font-weight:bold;font-size:11px;text-transform:uppercase;letter-spacing:.06em;padding:8px 14px;border-top:2px solid #e8ddd2}
+table.compare tr.data-row td{padding:9px 10px;border-bottom:1px solid #f0ebe5;vertical-align:middle;color:#0f172a}
+table.compare tr.data-row:last-child td{border-bottom:none}
+table.compare tr.data-row:hover td{background:#faf8f5}
+table.compare td.feat-name{font-size:12px;color:#0f172a;padding-left:14px;font-weight:500}
+table.compare td.feat-name span{display:block;font-size:11px;color:#7DA0C0;font-weight:normal;margin-top:2px}
+table.compare td.cell{text-align:center;font-size:18px}
+.yes{color:#1a5c38}
+.no{color:#ccc;font-size:14px}
+.partial{color:#B48750}
+.badge-y{display:inline-block;background:#e8f4ee;color:#1a5c38;font-size:10px;padding:2px 7px;border-radius:10px;font-weight:bold}
+.badge-n{display:inline-block;background:#f0ebe5;color:#bbb;font-size:10px;padding:2px 7px;border-radius:10px}
+.badge-p{display:inline-block;background:#faeeda;color:#7a4f00;font-size:10px;padding:2px 7px;border-radius:10px}
+
+/* EXPLAIN TAB */
+.explain-intro{font-size:14px;color:#4b3b33;margin-bottom:1.5rem;line-height:1.6;background:#fff;padding:16px 20px;border-radius:16px;border-left:4px solid #B48750}
+.cat-section{margin-bottom:2rem}
+.cat-title{font-size:13px;font-weight:bold;text-transform:uppercase;letter-spacing:.08em;color:#7A4531;margin-bottom:12px;padding-bottom:6px;border-bottom:2px solid #e8ddd2}
+.feat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
+.feat-card{background:#fff;border-radius:16px;border:1px solid #e8ddd2;padding:18px 20px;transition:box-shadow .15s}
+.feat-card:hover{box-shadow:0 4px 16px rgba(15,23,42,.08)}
+.feat-card-header{display:flex;align-items:flex-start;gap:12px;margin-bottom:10px}
+.feat-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.feat-card-title{font-size:14px;font-weight:bold;color:#0f172a;margin-bottom:2px}
+.feat-card-plats{font-size:11px;color:#4F6988}
+.feat-card-desc{font-size:13px;color:#4b3b33;line-height:1.6;margin-bottom:10px}
+.feat-card-value{font-size:12px;color:#7A4531;background:#f7f5f2;padding:8px 12px;border-radius:8px;border-left:3px solid #B48750;line-height:1.5}
+.feat-card-value strong{color:#4F6988}
+
+footer{text-align:center;margin-top:32px;color:#B48750;font-weight:bold;font-size:14px}
+footer a{color:#B48750;text-decoration:none}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>AI Platform Functionality Comparison 2026</h1>
+  <p>Projects · Memory · Deep Research · Canvas · Image Gen · Voice · Agentic Tasks · and more — across Claude, ChatGPT, Gemini, Copilot, Mistral, Perplexity &amp; DeepSeek</p>
+</div>
+
+<div class="tabs">
+  <button class="tab-btn active" onclick="showTab('compare',this)">Compare</button>
+  <button class="tab-btn" onclick="showTab('explain',this)">Explain features</button>
+</div>
+
+<!-- ═══════════════════════════ COMPARE TAB ═══════════════════════════ -->
+<div id="compare" class="panel active">
+
+<div class="filters-row">
+  <button class="pill active" onclick="filterRows('all',this)">All features</button>
+  <button class="pill" onclick="filterRows('workspace',this)">Workspace</button>
+  <button class="pill" onclick="filterRows('research',this)">Research</button>
+  <button class="pill" onclick="filterRows('creation',this)">Creation</button>
+  <button class="pill" onclick="filterRows('agentic',this)">Agentic</button>
+  <button class="pill" onclick="filterRows('integration',this)">Integration</button>
+</div>
+
+<div class="legend-row">
+  <span class="leg"><span class="badge-y">Yes</span> Available</span>
+  <span class="leg"><span class="badge-p">Part.</span> Partial / limited</span>
+  <span class="leg"><span class="badge-n">No</span> Not available</span>
+</div>
+
+<div class="tbl-wrap">
+<table class="compare" id="compare-table">
+<thead>
+  <tr>
+    <th class="feat-col" style="text-align:left;padding-left:14px">Feature</th>
+    <th class="plat-col">Claude</th>
+    <th class="plat-col">ChatGPT</th>
+    <th class="plat-col">Gemini</th>
+    <th class="plat-col">Copilot</th>
+    <th class="plat-col">Mistral</th>
+    <th class="plat-col">Perplexity</th>
+    <th class="plat-col">DeepSeek</th>
+  </tr>
+  <tr class="sub-head">
+    <th>Feature</th>
+    <th>Anthropic</th>
+    <th>OpenAI</th>
+    <th>Google</th>
+    <th>Microsoft</th>
+    <th>Mistral AI</th>
+    <th>Perplexity AI</th>
+    <th>DeepSeek</th>
+  </tr>
+</thead>
+<tbody id="compare-body">
+</tbody>
+</table>
+</div>
+</div><!-- end compare -->
+
+<!-- ═══════════════════════════ EXPLAIN TAB ═══════════════════════════ -->
+<div id="explain" class="panel">
+
+<div class="explain-intro">
+  These are the key platform-level features that go beyond simple chatting. Understanding what each one does — and who has it — is what separates casual AI users from practitioners who get real work done.
+</div>
+
+<div id="explain-body"></div>
+
+</div><!-- end explain -->
+
+<footer>
+  CORE IA — Salviati Academy · <a href="https://salviati.pt">salviati.pt</a> · info@salviati.pt
+</footer>
+
+<script>
+/* ─── DATA ─── */
+const FEATURES = [
+  /* ─ WORKSPACE & ORGANISATION ─ */
+  {cat:'workspace', name:'Projects / Workspaces', sub:'Organise chats, files & instructions in one place',
+   claude:'y', chatgpt:'y', gemini:'n', copilot:'n', mistral:'n', perplexity:'y', deepseek:'n',
+   notes:{claude:'Claude Projects — shared context, uploaded files, and custom instructions across all chats in the project',chatgpt:'ChatGPT Projects — group chats + files + instructions; shareable in Team/Enterprise',perplexity:'Spaces — shared research collections with custom instructions'},
+   explain:{what:'A dedicated workspace where you upload reference files, set persistent instructions, and group related conversations so the AI always has your context without you repeating yourself.',value:'Eliminates the need to re-explain your situation every conversation. Set it once, use it forever across all chats in that workspace.',who:'Claude · ChatGPT · Perplexity (Spaces)',uniqueBy:'Claude & ChatGPT most fully featured'}},
+
+  {cat:'workspace', name:'Persistent Memory', sub:'Remembers you across separate conversations',
+   claude:'y', chatgpt:'y', gemini:'p', copilot:'p', mistral:'n', perplexity:'n', deepseek:'n',
+   explain:{what:'The AI builds a profile of who you are — your job, preferences, past conversations — and uses it automatically in future chats without you mentioning it.',value:'Conversations feel like talking to someone who knows you. You stop re-introducing yourself. The AI gives more relevant answers over time.',who:'Claude · ChatGPT · Gemini (limited)',uniqueBy:'ChatGPT Memory most mature; Claude Memory growing'}},
+
+  {cat:'workspace', name:'Custom AI Personas', sub:'Build a tailored AI version for a specific task or role',
+   claude:'p', chatgpt:'y', gemini:'y', copilot:'y', mistral:'p', perplexity:'p', deepseek:'n',
+   notes:{chatgpt:'Custom GPTs — full builder, GPT Store marketplace',gemini:'Gems — custom AI agents with specific instructions and personality',copilot:'Copilot Studio — enterprise custom agent builder'},
+   explain:{what:'Create a specialised version of the AI pre-loaded with instructions, a persona, and knowledge. ChatGPT calls them Custom GPTs, Gemini calls them Gems, Copilot uses Copilot Studio.',value:'Instead of prompting from scratch every time, you open your custom AI and it already knows its role, your brand, your style, the task at hand.',who:'ChatGPT (GPT Store) · Gemini (Gems) · Copilot (Studio) · Claude (via Project instructions)',uniqueBy:'ChatGPT GPT Store has thousands of ready-made personas; Gemini Gems easiest to create'}},
+
+  {cat:'workspace', name:'Shared / Team Workspaces', sub:'Collaborate on AI projects with colleagues',
+   claude:'y', chatgpt:'y', gemini:'n', copilot:'y', mistral:'n', perplexity:'p', deepseek:'n',
+   explain:{what:'Multiple people can access the same AI workspace, share uploaded files and instructions, and see each other\'s work — like a shared drive but for AI projects.',value:'Teams align faster. No duplicate prompts or files. A single source of truth for a project\'s AI context.',who:'Claude Team · ChatGPT Team/Enterprise · Copilot M365 · Perplexity Spaces (partial)',uniqueBy:'Copilot deepest — connects to actual org files (SharePoint, Teams)'}},
+
+  /* ─ RESEARCH ─ */
+  {cat:'research', name:'Deep Research', sub:'Multi-step autonomous research producing a full report',
+   claude:'y', chatgpt:'y', gemini:'y', copilot:'p', mistral:'n', perplexity:'y', deepseek:'n',
+   notes:{claude:'Research feature — Pro+ plans',chatgpt:'Deep Research — browses hundreds of sources',gemini:'Deep Research — powered by Gemini Pro, integrates Workspace',perplexity:'Deep Research FREE with limits; Pro unlimited — fastest to cite'},
+   explain:{what:'You give it a complex question and walk away. The AI searches dozens to hundreds of web sources, synthesises findings, and returns a structured report with citations — in minutes.',value:'What used to take hours of manual reading and note-taking happens automatically. Ideal for market research, competitor analysis, academic review, or preparing a presentation.',who:'Claude · ChatGPT · Gemini · Perplexity (free tier!)',uniqueBy:'Perplexity only platform with Deep Research free for all users'}},
+
+  {cat:'research', name:'Web Search (always-on)', sub:'Real-time internet access built into every answer',
+   claude:'p', chatgpt:'p', gemini:'y', copilot:'y', mistral:'p', perplexity:'y', deepseek:'p',
+   notes:{gemini:'Google Search grounding — native, not a plugin',copilot:'Bing search integrated by default',perplexity:'Core product — every answer is web-grounded with citations'},
+   explain:{what:'The AI doesn\'t just rely on training data — it searches the web and uses live results to answer your question. Some platforms have this always on; others require you to enable a tool.',value:'Answers reflect today\'s reality, not data from training. Essential for news, prices, recent events, or anything that changes frequently.',who:'Perplexity (always-on) · Gemini (Google Search native) · Copilot (Bing) · Others as tool',uniqueBy:'Perplexity + Gemini most deeply integrated; others treat it as an optional add-on'}},
+
+  {cat:'research', name:'Citations & Source Transparency', sub:'Every answer shows verifiable source links',
+   claude:'p', chatgpt:'p', gemini:'p', copilot:'p', mistral:'n', perplexity:'y', deepseek:'n',
+   explain:{what:'The AI shows which websites, documents, or sources it used to construct its answer — with clickable links you can verify yourself.',value:'Critical for academic work, journalism, professional advice, or any situation where you need to verify what the AI says. Reduces risk of acting on hallucinated facts.',who:'Perplexity (every answer) · Others partial (when web search is used)',uniqueBy:'Perplexity built its entire product around citations — no other platform does this by default for every response'}},
+
+  {cat:'research', name:'NotebookLM', sub:'Research grounded exclusively in your uploaded documents',
+   claude:'n', chatgpt:'n', gemini:'y', copilot:'n', mistral:'n', perplexity:'n', deepseek:'n',
+   explain:{what:'A separate Google product deeply integrated with Gemini. You upload your own documents (PDFs, notes, slides) and the AI only answers from those sources — nothing else. Can also generate podcast-style audio summaries.',value:'Zero hallucination risk from outside sources. Perfect for studying your own notes, analysing a specific document set, or preparing for a presentation using only materials you trust.',who:'Google only (Gemini ecosystem)',uniqueBy:'Unique to Google — no equivalent in any other platform'}},
+
+  /* ─ CREATION ─ */
+  {cat:'creation', name:'Canvas / Artifact Editor', sub:'Live side-panel workspace for documents and code',
+   claude:'y', chatgpt:'y', gemini:'y', copilot:'y', mistral:'p', perplexity:'p', deepseek:'n',
+   notes:{claude:'Artifacts — renders code, HTML, React, diagrams live',chatgpt:'Canvas — collaborative writing and code editor with inline suggestions',gemini:'Canvas — interactive creation workspace',copilot:'Copilot Pages — collaborative AI docs',perplexity:'Pages — publish research as formatted pages'},
+   explain:{what:'Instead of AI output appearing in the chat scroll, a side panel opens showing a live editable document, code, or canvas. You can directly edit, the AI can revise, and you iterate side by side.',value:'Dramatically faster for producing finished documents, code, or presentations. You don\'t lose track of versions. The AI can see the whole document when you ask for edits.',who:'Claude (Artifacts) · ChatGPT (Canvas) · Gemini (Canvas) · Copilot (Pages)',uniqueBy:'Claude Artifacts renders live interactive apps and HTML; ChatGPT Canvas has Python execution'}},
+
+  {cat:'creation', name:'Image Generation', sub:'Create images from text descriptions',
+   claude:'n', chatgpt:'y', gemini:'y', copilot:'y', mistral:'p', perplexity:'n', deepseek:'n',
+   notes:{chatgpt:'DALL-E built-in — best quality, all plans',gemini:'Imagen — Google\'s image model',copilot:'Designer (DALL-E powered)',mistral:'Le Chat — image gen in beta'},
+   explain:{what:'Type a description and the AI generates an original image — illustrations, diagrams, marketing visuals, social media graphics, or concept art.',value:'No need for a separate design tool for quick visuals. Create thumbnails, slide backgrounds, or social posts without leaving the AI platform.',who:'ChatGPT (DALL-E — best) · Gemini (Imagen) · Copilot (Designer)',uniqueBy:'Claude deliberately does not offer image generation; ChatGPT DALL-E remains the most capable'}},
+
+  {cat:'creation', name:'Voice Mode (real-time conversation)', sub:'Speak and hear responses naturally',
+   claude:'p', chatgpt:'y', gemini:'y', copilot:'y', mistral:'n', perplexity:'n', deepseek:'n',
+   notes:{claude:'Basic speech-to-text on mobile only',chatgpt:'Advanced Voice — emotional, adaptive, near-human quality',gemini:'Voice with Google Assistant integration'},
+   explain:{what:'Have a natural spoken conversation with the AI — it listens, understands, and responds in a synthesised voice. Goes beyond dictation: the AI adapts tone, speed, and style to the conversation.',value:'Hands-free use while driving, cooking, or exercising. Natural brainstorming without typing. Language practice. Interview preparation.',who:'ChatGPT (most advanced) · Gemini · Copilot · Claude (basic mobile)',uniqueBy:'ChatGPT Advanced Voice Mode far ahead of all others in naturalness and emotional range'}},
+
+  {cat:'creation', name:'Code Interpreter / Execution', sub:'Run code and analyse data inside the chat',
+   claude:'y', chatgpt:'y', gemini:'y', copilot:'p', mistral:'p', perplexity:'n', deepseek:'n',
+   notes:{chatgpt:'Advanced Data Analysis — Python execution, chart generation, file processing'},
+   explain:{what:'The AI doesn\'t just write code — it actually runs it in a secure sandbox and shows you the output, charts, or processed data right in the conversation.',value:'Analyse a spreadsheet, generate a chart from your data, test a script, debug a function — all without leaving the chat and without having a local coding environment.',who:'Claude · ChatGPT (most capable) · Gemini · Mistral (partial)',uniqueBy:'ChatGPT Advanced Data Analysis most comprehensive for data science workflows'}},
+
+  /* ─ AGENTIC ─ */
+  {cat:'agentic', name:'Desktop Agent / Cowork', sub:'AI that controls your computer and files autonomously',
+   claude:'y', chatgpt:'n', gemini:'n', copilot:'p', mistral:'n', perplexity:'n', deepseek:'n',
+   notes:{claude:'Cowork — reads/writes local files, runs tasks, coordinates sub-agents. Mac & Windows',copilot:'Copilot Cowork inside M365 — enterprise only, powered by Claude'},
+   explain:{what:'Give the AI access to a folder on your computer. Describe what you want done — organise these files, extract data from these documents, create a report from these notes — and walk away. The AI does it.',value:'Tasks that used to take hours of manual work are delegated completely. Not just generating text — actually doing work on your actual files.',who:'Claude Cowork (most advanced standalone) · Copilot (enterprise M365)',uniqueBy:'Claude Cowork is the only standalone desktop agent for individual users; Copilot version is enterprise-only'}},
+
+  {cat:'agentic', name:'Agent Mode / Multi-step Tasks', sub:'AI that plans and executes multi-step workflows',
+   claude:'y', chatgpt:'y', gemini:'p', copilot:'y', mistral:'n', perplexity:'n', deepseek:'n',
+   notes:{chatgpt:'Agent Mode — uses tools, browses web, writes and runs code in sequence',claude:'Via Claude Code + Cowork',copilot:'Copilot Agents — M365 workflow automation'},
+   explain:{what:'Rather than responding to one prompt at a time, the AI makes a plan, executes each step (searching the web, writing code, reading files, calling APIs), and delivers a finished result.',value:'Complex multi-step work happens without you supervising every step. Research → draft → format → send could all happen from one instruction.',who:'Claude (Code + Cowork) · ChatGPT (Agent Mode) · Copilot (Agents)',uniqueBy:'ChatGPT Agent Mode most versatile across tools; Claude Code most powerful for technical tasks'}},
+
+  {cat:'agentic', name:'Scheduled / Recurring Tasks', sub:'Set tasks to run automatically on a schedule',
+   claude:'y', chatgpt:'y', gemini:'n', copilot:'n', mistral:'n', perplexity:'n', deepseek:'n',
+   notes:{claude:'Cowork Scheduled Tasks — run on-demand or on a cadence',chatgpt:'Tasks feature — set reminders and recurring actions'},
+   explain:{what:'You define a task once and the AI runs it automatically at the time or frequency you set — daily summaries, weekly reports, regular research briefings.',value:'Transforms AI from a reactive tool into a proactive assistant. Like having a system that does Monday morning prep every week without you asking.',who:'Claude (Cowork) · ChatGPT (Tasks)',uniqueBy:'Very new capability — Claude and ChatGPT only; others have not launched this yet'}},
+
+  {cat:'agentic', name:'Visible Chain-of-Thought', sub:'See the AI\'s full reasoning process as it thinks',
+   claude:'p', chatgpt:'p', gemini:'p', copilot:'p', mistral:'n', perplexity:'n', deepseek:'y',
+   notes:{deepseek:'R1 model shows complete thinking steps publicly',claude:'Extended Thinking shows reasoning summary',chatgpt:'Thinking modes show partial reasoning'},
+   explain:{what:'Before giving you the answer, the AI shows you all of its reasoning steps — the deliberation, the alternatives considered, the logic chain. DeepSeek R1 shows this fully; others show summaries.',value:'Lets you audit the AI\'s reasoning, spot errors in logic, understand why it reached a conclusion, and decide whether to trust the answer.',who:'DeepSeek R1 (most transparent) · Claude/ChatGPT/Gemini (partial summaries)',uniqueBy:'DeepSeek R1 uniquely shows the complete unfiltered thinking process'}},
+
+  /* ─ INTEGRATION ─ */
+  {cat:'integration', name:'MCP Connectors (app integrations)', sub:'Connect the AI to your actual work tools',
+   claude:'y', chatgpt:'p', gemini:'p', copilot:'y', mistral:'n', perplexity:'n', deepseek:'n',
+   notes:{claude:'50+ directory connectors — Gmail, Drive, Slack, Canva, Cloudinary, Airtable, etc. Claude invented MCP',copilot:'M365 native connectors + partner ecosystem'},
+   explain:{what:'The AI connects directly to your real apps — email, calendar, project management, design tools, databases — and can read data from them and take actions inside them without you copy-pasting anything.',value:'Stop explaining context and start letting the AI see it. "Summarise my emails from this client this month" or "Create a Canva post from this Google Doc" become one-instruction workflows.',who:'Claude (MCP — largest open ecosystem) · Copilot (M365 native)',uniqueBy:'Claude invented the MCP standard — its connector ecosystem is the most open and fastest growing'}},
+
+  {cat:'integration', name:'Google Workspace Native Integration', sub:'AI built into Docs, Gmail, Sheets, Drive',
+   claude:'p', chatgpt:'p', gemini:'y', copilot:'n', mistral:'n', perplexity:'n', deepseek:'n',
+   notes:{gemini:'Side panel in every Google app — the only AI native to the Google suite'},
+   explain:{what:'Gemini lives inside Gmail, Google Docs, Sheets, Drive, and Calendar as a side panel. It can read your email, draft replies, summarise documents, and query your Drive without you leaving the app.',value:'If you live in Google Workspace, this eliminates the need to copy-paste between your tools and an AI chat. The AI sees what you\'re working on.',who:'Gemini only (natively) · Claude & ChatGPT via connectors',uniqueBy:'No other AI is natively embedded inside Google products at this level'}},
+
+  {cat:'integration', name:'Microsoft 365 Native Integration', sub:'AI built into Word, Excel, Teams, Outlook',
+   claude:'n', chatgpt:'p', gemini:'n', copilot:'y', mistral:'n', perplexity:'n', deepseek:'n',
+   notes:{copilot:'Copilot is Microsoft\'s AI layer across all M365 apps. Word, Excel, PowerPoint, Teams, Outlook all have built-in Copilot'},
+   explain:{what:'Copilot lives inside Word, Excel, PowerPoint, Teams, and Outlook. Draft emails in Outlook, summarise meetings in Teams, analyse data in Excel — all from within the app you\'re already using.',value:'For organisations already on M365, this is often the most practical AI solution because it requires no new tools, no context switching, and works within existing IT governance.',who:'Copilot only — Microsoft\'s exclusive advantage',uniqueBy:'No other AI has this level of native integration with Microsoft\'s productivity suite'}},
+
+  {cat:'integration', name:'Open Weights / On-Premise Deployment', sub:'Run the AI model on your own infrastructure',
+   claude:'n', chatgpt:'n', gemini:'n', copilot:'n', mistral:'y', perplexity:'n', deepseek:'y',
+   notes:{mistral:'Apache 2.0 licence — fully open, run on any server',deepseek:'Open weights — run locally, but China data privacy concerns'},
+   explain:{what:'The model weights (the "brain" of the AI) are publicly released. You can download and run the model on your own servers, with no data leaving your organisation, no subscriptions, and full control.',value:'Maximum data privacy. No vendor lock-in. Can be fine-tuned for specific use cases. Essential for regulated industries, defence, healthcare, or any use case where data must not touch external servers.',who:'Mistral (EU-based, GDPR-safe) · DeepSeek (open but China-based)',uniqueBy:'Only Mistral offers frontier-class open weights from an EU provider with GDPR compliance'}},
+
+  {cat:'integration', name:'Fine-tuning (custom model training)', sub:'Train the AI on your own data to specialise it',
+   claude:'n', chatgpt:'p', gemini:'n', copilot:'n', mistral:'y', perplexity:'n', deepseek:'p',
+   notes:{mistral:'Available on all plans via La Plateforme',chatgpt:'Fine-tuning available via API for enterprise'},
+   explain:{what:'You provide examples of the exact inputs and outputs you want, and the model is retrained to match your specific style, domain knowledge, or behaviour — not just prompted, but actually trained.',value:'The AI starts thinking like your company, using your terminology, following your document structure, producing outputs in your exact format. Far beyond what system prompts can achieve.',who:'Mistral (all plans) · ChatGPT (API/enterprise) · DeepSeek (open weights)',uniqueBy:'Mistral most accessible fine-tuning for non-enterprise users'}},
+
+  {cat:'integration', name:'Marketplace / Plugin Ecosystem', sub:'Discover and install third-party AI extensions',
+   claude:'y', chatgpt:'y', gemini:'p', copilot:'y', mistral:'n', perplexity:'n', deepseek:'n',
+   notes:{chatgpt:'GPT Store — thousands of community-built custom GPTs',claude:'MCP Connector Directory — 50+ verified integrations',copilot:'Copilot Studio + M365 App Store'},
+   explain:{what:'A directory or store where you can find AI tools built by other developers or companies — specialised assistants, integrations with specific software, or workflows for niche tasks.',value:'Access hundreds of specialised AI applications without building them yourself. A lawyer can find a legal research GPT; a marketer can find one trained on advertising frameworks.',who:'ChatGPT (GPT Store — largest) · Claude (MCP Directory) · Copilot (Studio)',uniqueBy:'ChatGPT GPT Store has the largest ecosystem by far with thousands of community-created options'}}
+];
+
+const CATS = {
+  workspace:  {label:'Workspace & Organisation', icon:'📁', color:'#4F6988'},
+  research:   {label:'Research & Information', icon:'🔍', color:'#0F6E56'},
+  creation:   {label:'Creation & Output', icon:'✏️', color:'#D85A30'},
+  agentic:    {label:'Agentic & Automation', icon:'⚡', color:'#534AB7'},
+  integration:{label:'Integration & Ecosystem', icon:'🔗', color:'#1D5FA5'}
+};
+
+const PLATFORMS = ['claude','chatgpt','gemini','copilot','mistral','perplexity','deepseek'];
+
+function badge(val){
+  if(val==='y') return '<span class="badge-y">Yes</span>';
+  if(val==='n') return '<span class="badge-n">No</span>';
+  return '<span class="badge-p">Part.</span>';
+}
+
+let currentFilter = 'all';
+
+function buildCompare(){
+  const body = document.getElementById('compare-body');
+  let html = '';
+  let lastCat = '';
+  const filtered = currentFilter==='all' ? FEATURES : FEATURES.filter(f=>f.cat===currentFilter);
+  filtered.forEach(f=>{
+    if(f.cat!==lastCat){
+      const c = CATS[f.cat];
+      html += `<tr class="category-row" data-cat="${f.cat}">
+        <td colspan="8">${c.icon} ${c.label}</td></tr>`;
+      lastCat=f.cat;
+    }
+    html += `<tr class="data-row" data-cat="${f.cat}">
+      <td class="feat-name">${f.name}<span>${f.sub}</span></td>
+      ${PLATFORMS.map(p=>`<td class="cell">${badge(f[p])}</td>`).join('')}
+    </tr>`;
+  });
+  body.innerHTML = html;
+}
+
+function buildExplain(){
+  const body = document.getElementById('explain-body');
+  let html = '';
+  Object.entries(CATS).forEach(([key,cat])=>{
+    const items = FEATURES.filter(f=>f.cat===key && f.explain);
+    if(!items.length) return;
+    html += `<div class="cat-section">
+      <div class="cat-title">${cat.icon} ${cat.label}</div>
+      <div class="feat-grid">`;
+    items.forEach(f=>{
+      const e = f.explain;
+      html += `<div class="feat-card">
+        <div class="feat-card-header">
+          <div class="feat-icon" style="background:${cat.color}22;color:${cat.color}">${cat.icon}</div>
+          <div>
+            <div class="feat-card-title">${f.name}</div>
+            <div class="feat-card-plats">${e.who}</div>
+          </div>
+        </div>
+        <div class="feat-card-desc">${e.what}</div>
+        <div class="feat-card-value">
+          <strong>What it adds for you:</strong> ${e.value}
+          ${e.uniqueBy ? `<br><strong>Standout:</strong> ${e.uniqueBy}` : ''}
+        </div>
+      </div>`;
+    });
+    html += `</div></div>`;
+  });
+  body.innerHTML = html;
+}
+
+window.showTab = function(id, el){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  el.classList.add('active');
+};
+
+window.filterRows = function(cat, el){
+  currentFilter = cat;
+  document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+  buildCompare();
+};
+
+buildCompare();
+buildExplain();
+</script>
+</body>
+</html>
